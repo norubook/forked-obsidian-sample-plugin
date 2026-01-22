@@ -1,5 +1,7 @@
-import {App, Editor, MarkdownView, Modal, Notice, Plugin} from 'obsidian';
+import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
 import {DEFAULT_SETTINGS, MyPluginSettings, SampleSettingTab} from "./settings";
+
+
 
 // Remember to rename these classes and interfaces!
 
@@ -9,10 +11,34 @@ export default class MyPlugin extends Plugin {
 	async onload() {
 		await this.loadSettings();
 
+
+		this.addCommand({
+    		id: 'print-current-content',
+    		name: '現在のノートの内容をコンソールに表示',
+    		callback: () => {
+    		    // 1. 現在のアクティブなビュー（エディタ画面）を取得
+        		const view = this.app.workspace.getActiveViewOfType(MarkdownView);
+        
+        		if (view) {
+            		// 2. エディタ内のテキストデータをすべて取得
+            		const content = view.getViewData();
+            
+            		// 3. コンソールに表示（確認用）
+            		console.log(content);
+            
+		            // 4. 通知も出す
+        		    new Notice('コンソールに中身を表示しました！');
+        		} else {
+            		new Notice('Markdownファイルを開いていません');
+        		}
+    		}
+		});
+
+
 		// This creates an icon in the left ribbon.
 		this.addRibbonIcon('dice', 'Sample', (evt: MouseEvent) => {
 			// Called when the user clicks the icon.
-			new Notice('This is a notice!');
+			new Notice('プラグインテスト．');
 		});
 
 		// This adds a status bar item to the bottom of the app. Does not work on mobile apps.
